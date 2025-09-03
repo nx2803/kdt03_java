@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.ruby.java.ch02데이터타입"},{"l":"com.ruby.java.ch03제어문"},{"l":"edu"}];updateSearchResults();

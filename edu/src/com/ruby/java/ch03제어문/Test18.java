@@ -3,18 +3,15 @@ package com.ruby.java.ch03제어문;
 
 // @Override > 클래스 상속시 코드 재사용 정의
 /**
- * @author 홍봉희
+ * @author 윤치형
+ * 
  */
 public class Test18 {
-	public static void main(String[] args) {
-		System.out.println();
-	}
+	
 	/**
-	 * @param a 합의 첫째 요소
-	 * 
-	 * @param b 합의 둘째 요소
-	 * 
-	 * @return a와 b를 합한 결과
+	 * @param a 합의 첫번째 변수
+	 * @param b 합의 두번째 변수
+	 * @return a+b 결과를 반환
 	 */
 	public int sum(int a, int b) {
 
@@ -22,6 +19,6 @@ public class Test18 {
 		salary += 10;
 		System.out.println();
 		//
-		return a + b;
+		return a+b;
 	}
 }
