@@ -17,10 +17,10 @@ public class 실습_4_1_변수들사용 {
 		double avg = (double)sum /5;
 		int min = sc1;
 		int max = sc1;
-		if (sc2 > sc1) {
+		if (sc2 > max) {
 			max = sc2;
 		}
-		else if (sc2 < sc1)
+		else if (sc2 < min)
 			min = sc2;
 		if(sc3 > max) {
 			max = sc3;
