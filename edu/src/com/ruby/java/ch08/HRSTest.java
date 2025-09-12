@@ -180,10 +180,10 @@ public class HRSTest {
 		Employee s = new Salesman("hong", 10000, 2301);
 		Salesman s5;
 		// s5=s;
-		s = s5;
-		if (s5.equals(s)) {
-			System.out.println(s5 + "은 " + s + "과 같습니다.");
-		}
+//		s = s5;
+//		if (s5.equals(s)) {
+//			System.out.println(s5 + "은 " + s + "과 같습니다.");
+//		}
 		/*
 		 * 341페이지 (2) 인스턴스 생성
 		 */
@@ -215,13 +215,13 @@ public class HRSTest {
 		 * Object 클래스의 toString(): 339페이지 첫째, 둘째 문단
 		 */
 		// Salesman s2 = s;
-		if (s2.equals(s))
-			System.out.println("s,s2 같은 객체");
-		else
-			System.out.println("s,s2 다른 객체");
-		System.out.println(s.toString());
-		System.out.println(s2.toString());
-		System.out.println(d.toString());
+//		if (s2.equals(s))
+//			System.out.println("s,s2 같은 객체");
+//		else
+//			System.out.println("s,s2 다른 객체");
+//		System.out.println(s.toString());
+//		System.out.println(s2.toString());
+//		System.out.println(d.toString());
 		// d = s;
 		// s = d;
 		/*

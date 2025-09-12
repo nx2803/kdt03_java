@@ -1,7 +1,5 @@
 package com.ruby.java.ch08.다형성_내부클래스;
 
-
-
 //동적바인딩
 //Item 추상 클래스
 abstract class Item {
@@ -11,28 +9,29 @@ abstract class Item {
 
 	// 생성자
 	public Item(String name, double price, int stockQuantity) {
-		this.name=name;
-		this.price=price;
-		this.stockQuantity=stockQuantity;
+		this.name = name;
+		this.price = price;
+		this.stockQuantity = stockQuantity;
 	}
-	
-	// Getter	
+
+	// Getter
 	public String getname() {
 		return name;
 	}
+
 	public double getprice() {
 		return price;
 	}
+
 	public int getstockQuantity() {
 		return stockQuantity;
 	}
-	
-	
+
 	@Override
 	public String toString() {
 		return "name = " + name + ", price = " + price + ", stockQuantity = " + stockQuantity;
 	}
-	
+
 	// 재고 감소 메소드
 	public void reduceStock(int quantity) {
 		stockQuantity -= quantity;
@@ -48,9 +47,9 @@ class Electronics extends Item {
 	// 생성자
 	public Electronics(String name, double price, int stockQuantity, int madeYear) {
 		super(name, price, stockQuantity);
-		this.madeYear=madeYear;
+		this.madeYear = madeYear;
 	}
-	
+
 	@Override
 	public void show() {
 		System.out.println("Electronics : " + super.toString() + ", madeYear = " + madeYear);
@@ -64,10 +63,9 @@ class Clothing extends Item {
 	// 생성자
 	public Clothing(String name, double price, int stockQuantity, int size) {
 		super(name, price, stockQuantity);
-		this.size=size;
+		this.size = size;
 	}
-	
-	
+
 	@Override
 	public void show() {
 		System.out.println("Clothing : " + super.toString() + ", size = " + size);
@@ -87,11 +85,11 @@ class SeasonalDiscount implements Discountable {
 	public SeasonalDiscount() {
 		seasonalDiscount = 0.0;
 	}
-	
+
 	public SeasonalDiscount(double seasonalDiscount) {
 		this.seasonalDiscount = seasonalDiscount;
 	}
-	
+
 	@Override
 	public double getDiscountedPrice(double price) {
 		return price * seasonalDiscount;
@@ -106,27 +104,27 @@ class Order extends SeasonalDiscount {
 	private int[] quantities; // 주문 제품 수량들
 	private String[] orderDates; // 주문일자들
 	private int count = 0;
-	private double seasonalDiscount;
 
 	// 생성자
 	public Order(Customer customer, double seasonalDiscount) {
+		super(seasonalDiscount);
 		this.customer = customer;
-		items = new Item[5];
-		quantities=new int[5];
-		orderDates = new String[5];
-		this.seasonalDiscount = seasonalDiscount;
+		items = new Item[N];
+		quantities = new int[N];
+		orderDates = new String[N];
 		
+		
+
 	}
-	
-	
+
 	public void addItem(Item item, int quantity, String date) {
 		// 최대 주문 item 개수를 넘어서는지 확인
 		
 		// item에 재고가 있는지 확인
 		
+
 		// 재고가 있으면 아이템 추가
-		if(quantity < item.getstockQuantity())
-		{
+		if (quantity < item.getstockQuantity()) {
 			items[count] = item;
 			quantities[count] = quantity;
 			orderDates[count] = date;
@@ -150,16 +148,17 @@ class Order extends SeasonalDiscount {
 		/*
 		 * 할인을 적용한 비용 계산
 		 */
-		return 0.0;
+		return calculateTotal()-getDiscountedPrice(calculateTotal())-customer.getDiscountedPrice(calculateTotal());
 	}
+
 	
 	// 주문 내역을 출력하는 메소드
 	public void printOrderSummary() {
-		//System.out.println(customer.toString());
+		// System.out.println(customer.toString());
 		System.out.println(customer.toString());
 		for (int i = 0; i < count; i++) {
 			System.out.println("제품명 : " + items[i].getname() + ", 단가: " + items[i].getprice() + ", 개수 : "
-					+ quantities[i] + " ==> 가격 : " + items[i].getprice() * quantities[i] + ", 주문일 : "+ orderDates[i]);
+					+ quantities[i] + " ==> 가격 : " + items[i].getprice() * quantities[i] + ", 주문일 : " + orderDates[i]);
 		}
 		System.out.println("총액 : " + calculateTotal());
 	}
@@ -169,7 +168,16 @@ class Order extends SeasonalDiscount {
 		/*
 		 * 할인가격 = 정가 - (정가*시즌할인율) - (정가*고객할인율)
 		 */
+		for (int i = 0; i < count; i++) {
+			System.out.println("제품명 : " + items[i].getname() + ", 단가: " + (items[i].getprice()-getDiscountedPrice(items[i].getprice())-customer.getDiscountedPrice(items[i].getprice()))
+					
+					+ ", 개수 : " + quantities[i] + " ==> 가격 : " + (items[i].getprice()-getDiscountedPrice(items[i].getprice())-customer.getDiscountedPrice(items[i].getprice())) * quantities[i]
+					+ ", 주문일 : " + orderDates[i]);
+		}
 		
+		
+		System.out.println("총액 : " + Math.round(calculateDiscountTotal()*100)/100.0);
+
 	}
 }
 
@@ -181,17 +189,16 @@ abstract class Customer {
 	public Customer(String name) {
 		this.name = name;
 	}
-	
-	
+
 	// Getter
 	public String getname() {
 		return name;
 	}
-		
+
 	public String toString() {
 		return "고객명:" + name;
 	}
-	
+
 	abstract double getDiscountedPrice(double price);
 }
 
@@ -200,16 +207,14 @@ class RegularCustomer extends Customer {
 	static final double REGULARDISCOUNT_RATE = 0.03;
 
 	// 생성자
-	public RegularCustomer(String name)
-	{
+	public RegularCustomer(String name) {
 		super(name);
-		
+
 	}
-	
-	
+
 	@Override
 	double getDiscountedPrice(double price) {
-		return REGULARDISCOUNT_RATE;
+		return price * REGULARDISCOUNT_RATE;
 	}
 }
 
@@ -218,18 +223,17 @@ class PremiumCustomer extends Customer {
 	static final double PREMIUMDISCOUNT_RATE = 0.1;
 
 	// 생성자
-	public PremiumCustomer(String name)
-	{
+	public PremiumCustomer(String name) {
 		super(name);
 	}
-	
 
 	@Override
 	double getDiscountedPrice(double price) {
-		return PREMIUMDISCOUNT_RATE;
+		return price * PREMIUMDISCOUNT_RATE;
 	}
-	
+
 }
+
 public class 실습_8_3_동적바인딩 {
 	static void showItemsStock(Item[] items) {
 		// 모든 아이템의 이름과 재고량, 가격 출력
@@ -239,7 +243,7 @@ public class 실습_8_3_동적바인딩 {
 	}
 
 	public static void main(String[] args) {
-	
+
 		// Item 타입의 배열 생성
 		Item[] items = new Item[4];
 
@@ -277,7 +281,7 @@ public class 실습_8_3_동적바인딩 {
 
 		System.out.println(">>PremiumCustomer 주문 내역 출력");
 		premiumOrder.printOrderSummary();
-		
+
 		System.out.println(">>PremiumCustomer 할인된 주문 내역 출력");
 		premiumOrder.printDiscountDetails(); // 할인된 내역 출력
 		System.out.println("-".repeat(80));
@@ -285,41 +289,39 @@ public class 실습_8_3_동적바인딩 {
 		// 모든 아이템의 이름과 재고량, 가격 출력
 		System.out.println(">>모든 아이템의 이름과 재고량, 가격 출력");
 		showItemsStock(items);
-	
+
 	}
 }
 /*
  * 출력 결과 예시
  * 
->>모든 아이템의 이름과 재고량, 가격 출력
-Electronics : name = 노트북, price = 150.0, stockQuantity = 100, madeYear = 23
-Clothing : name = 티셔츠, price = 10.0, stockQuantity = 100, size = 95
-Electronics : name = 휴대폰, price = 80.0, stockQuantity = 100, madeYear = 24
-Clothing : name = 청바지, price = 20.0, stockQuantity = 100, size = 90
---------------------------------------------------------------------------------
->>RegularCustomer 주문 내역 출력
-고객정보 : 홍길동
-제품명 : 노트북, 단가 : 150.0, 개수 : 1 ==> 가격 : 150.0, 주문일 : 240901
-제품명 : 티셔츠, 단가 : 10.0, 개수 : 2 ==> 가격 : 20.0, 주문일 : 240902
-총액 : 170.0
->>RegularCustomer 할인된 주문 내역 출력
-제품명 : 노트북, 할인 : 144.0, 개수 : 1 ==> 가격 : 144.0, 주문일 : 240901
-제품명 : 티셔츠, 할인 : 9.6, 개수 : 2 ==> 가격 : 19.2, 주문일 : 240902
-총액 : 163.2
---------------------------------------------------------------------------------
->>PremiumCustomer 주문 내역 출력
-고객정보 : 강감찬
-제품명 : 티셔츠, 단가 : 10.0, 개수 : 1 ==> 가격 : 10.0, 주문일 : 240901
-제품명 : 청바지, 단가 : 20.0, 개수 : 2 ==> 가격 : 40.0, 주문일 : 240903
-총액 : 50.0
->>PremiumCustomer 할인된 주문 내역 출력
-제품명 : 티셔츠, 할인 : 8.9, 개수 : 1 ==> 가격 : 8.9, 주문일 : 240901
-제품명 : 청바지, 할인 : 17.8, 개수 : 2 ==> 가격 : 35.6, 주문일 : 240903
-총액 : 44.5
---------------------------------------------------------------------------------
->>모든 아이템의 이름과 재고량, 가격 출력
-Electronics : name = 노트북, price = 150.0, stockQuantity = 99, madeYear = 23
-Clothing : name = 티셔츠, price = 10.0, stockQuantity = 97, size = 95
-Electronics : name = 휴대폰, price = 80.0, stockQuantity = 100, madeYear = 24
-Clothing : name = 청바지, price = 20.0, stockQuantity = 98, size = 90
+ * >>모든 아이템의 이름과 재고량, 가격 출력 
+ * Electronics : name = 노트북, price = 150.0, stockQuantity = 100, madeYear = 23 
+ * Clothing : name = 티셔츠, price = 10.0,stockQuantity = 100, size = 95 
+ * Electronics : name = 휴대폰, price = 80.0,  stockQuantity = 100, madeYear = 24 
+ * Clothing : name = 청바지, price = 20.0, stockQuantity = 100, size = 90
+ * -----------------------------------------------------------------------------
+ * --- >>RegularCustomer 주문 내역 출력 
+ * 고객정보 : 홍길동 제품명 : 노트북, 단가 : 150.0, 개수 : 1 ==> 가격 : 150.0, 주문일 : 240901 
+ * 제품명 : 티셔츠, 단가 : 10.0, 개수 : 2 ==> 가격 : 20.0, 주문일 : 240902 
+ * 총액 : 170.0 
+ * >>RegularCustomer 할인된 주문 내역 출력 
+ * 제품명 : 노트북, 할인 : 144.0, 개수 : 1 ==> 가격 : 144.0, 주문일 : 240901 
+ * 제품명 : 티셔츠, 할인 : 9.6, 개수 : 2 ==> 가격 : 19.2, 주문일 : 240902 
+ * 총액 : 163.2
+ * -------------------------------------------------------------------------------- 
+ * >>PremiumCustomer 주문 내역 출력 
+ * 고객정보 : 강감찬 제품명 : 티셔츠, 단가 : 10.0, 개수 : 1 ==> 가격 : 10.0, 주문일 : 240901 
+ * 제품명 : 청바지, 단가 : 20.0, 개수 : 2 ==> 가격 : 40.0, 주문일 : 240903 
+ * 총액 : 50.0 
+ * >>PremiumCustomer 할인된 주문 내역 출력 
+ * 제품명 : 티셔츠, 할인 : 8.9, 개수 : 1 ==> 가격 :8.9, 주문일 : 240901 
+ * 제품명 : 청바지, 할인 : 17.8, 개수 : 2 ==> 가격 : 35.6, 주문일 : 240903 
+ * 총액: 44.5
+ * -------------------------------------------------------------------------------- 
+ * >>모든 아이템의 이름과 재고량, 가격 출력 
+ * Electronics : name = 노트북, price = 150.0, stockQuantity = 99, madeYear = 23 
+ * Clothing : name = 티셔츠, price = 10.0, stockQuantity = 97, size = 95 
+ * Electronics : name = 휴대폰, price = 80.0, stockQuantity = 100, madeYear = 24 
+ * Clothing : name = 청바지, price = 20.0, stockQuantity = 98, size = 90
  */
