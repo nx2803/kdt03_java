@@ -68,7 +68,7 @@ class Lotto1 {
 public class 실습_10_2_lotto당첨 {
 
 	// Lotto 구매 횟수
-	private static final int NUMBEROFLOTTO = 5000;
+	private static final int NUMBEROFLOTTO = 100000;
 	
 	// 구매한 Lotto 화면에 출력 여부
 	private static final boolean PRINTLOTTO = true;
@@ -83,9 +83,6 @@ public class 실습_10_2_lotto당첨 {
 			if(w.contains(number)){
 				count++;
 			}
-		}
-		if (b.contains(lottoWin.getBonun())) {
-			count++;
 		}
 		
 		return count;
@@ -153,6 +150,7 @@ public class 실습_10_2_lotto당첨 {
 		}
 		System.out.println("-".repeat(80));
 		System.out.println(" ==> 당첨금 총액 : " + formatString(total));
+		System.out.println(" ==> 총 수익 : " + formatString(total-(NUMBEROFLOTTO*1000)));
 		
 	}
 }
