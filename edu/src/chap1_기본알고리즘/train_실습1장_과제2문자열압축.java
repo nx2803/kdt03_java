@@ -15,27 +15,25 @@ import java.util.StringTokenizer;
 */
 public class train_실습1장_과제2문자열압축 {
 
-    public static void main(String[] args) {
-        String input = "aabcccccaaa";
-        System.out.println("압축 결과: " + compress(input));
-    }
+	public static void main(String[] args) {
+		String input = "aabcccccaaa";
+		System.out.println("압축 결과: " + compress(input));
+	}
 
 	private static String compress(String input) {
 		// TODO 자동 생성된 메소드 스텁
-		String[] s = input.split("");
 		StringBuilder b = new StringBuilder();
-		int count=1;
-		for (int i = 1; i < s.length; i++) {
-			if (s[i].equals(s[i-1])) {
+		int count = 1;
+		for (int i = 1; i < input.length(); i++) {
+			if (input.charAt(i) == input.charAt(i - 1)) {
 				count++;
-			}
-			else {
-				b.append(s[i-1]);
+			} else {
+				b.append(input.charAt(i - 1));
 				b.append(count);
-				count=1;
+				count = 1;
 			}
 		}
-		b.append(s[s.length-1]);
+		b.append(input.charAt(input.length() - 1));
 		if (count > 1) {
 			b.append(count);
 		}

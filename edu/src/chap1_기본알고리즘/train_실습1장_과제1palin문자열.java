@@ -31,6 +31,9 @@ public class train_실습1장_과제1palin문자열 {
 
 	private static boolean isPalindrome(String s) {
 		// TODO 자동 생성된 메소드 스텁
+		if (s==null) {//검증코드, 조기종료코드
+			return false;
+		}
 		String[] a = s.split("");
 		int t = 0;
 		for (int i = 0; i < (a.length/2); i++) {
