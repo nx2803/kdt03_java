@@ -37,7 +37,7 @@ class PhyscData2 implements Comparable<PhyscData2> {
 	@Override
 	public int compareTo(PhyscData2 o) {
 		// TODO 자동 생성된 메소드 스텁
-		return this.name.compareTo(o.name);
+		return name.compareTo(o.name);
 	}
 }
 
@@ -63,6 +63,7 @@ public class train_실습2_14_1객체배열정렬 {
 
 		PhyscData2[] newData = insertObject(data, new PhyscData2("소주다", 179, 1.5));
 		// 배열의 사이즈를 1개 증가시킨후 insert되는 객체 보다 큰 값들은 우측으로 이동, 사이즈가 증가된 객체 배열을 리턴
+		System.out.println();
 		showData("삽입후", newData);
 	}
 
@@ -74,7 +75,7 @@ public class train_실습2_14_1객체배열정렬 {
 		for (i = 0; i < data.length; i++) {
 			if (physcData2.getName().compareTo(data[i].getName()) < 0) {
 				newData[i] = physcData2;
-				m=true;
+				m = true;
 				break;
 			}
 			newData[i] = data[i];
@@ -107,15 +108,29 @@ public class train_실습2_14_1객체배열정렬 {
 
 	private static void sortData(PhyscData2[] data) {
 		// TODO 자동 생성된 메소드 스텁
-		Arrays.sort(data);
+		// Arrays.sort(data);
+		for (int i = 0; i < data.length; i++) {
+			for (int j = i + 1; j < data.length; j++) {
+				if (data[i].getName().compareTo(data[j].getName()) > 0) {
+					swap(data, i, j);
 
+				}
+			}
+		}
+	}
+
+	private static void swap(PhyscData2[] data, int i, int j) {
+		// TODO 자동 생성된 메소드 스텁
+		PhyscData2 a = data[i];
+		data[i] = data[j];
+		data[j] = a;
 	}
 
 	private static void showData(String string, PhyscData2[] data) {
 		// TODO 자동 생성된 메소드 스텁
 		System.out.println(string);
 		for (int j = 0; j < data.length; j++) {
-			System.out.println(data[j].getName() + "\t" + data[j].getHeight() + "\t" + data[j].getVision());
+			System.out.println("[" + data[j].getName() + "\t" + data[j].getHeight() + "\t" + data[j].getVision() + "]");
 		}
 		System.out.println("");
 	}
