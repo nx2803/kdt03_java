@@ -37,15 +37,16 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 //5번 실습 - 2장 실습 2-14를 수정하여 객체 배열의 정렬 구현
-class PhyscData2 implements Comparable<PhyscData2>{
+class PhyscData2 implements Comparable<PhyscData2> {
 	String name;
 	int height;
 	double vision;
 
 	@Override
-	public String toString() {//[홍길동,162,0.3] 형태로 리턴한다 
-		
+	public String toString() {// [홍길동,162,0.3] 형태로 리턴한다
+
 	}
+
 	@Override
 	public int compareTo(PhyscData2 p) {
 		// name 비교 버젼
@@ -53,7 +54,36 @@ class PhyscData2 implements Comparable<PhyscData2>{
 	}
 
 }
-public class train_실습3_6_1객체배열탐색_Comparable {
+
+class Fruit5 {
+
+	String name;
+	int price;
+	String expire;
+
+	public Fruit5(String name, int price, String expire) {
+		// TODO 자동 생성된 생성자 스텁
+		this.name = name;
+		this.price = price;
+		this.expire = expire;
+	}
+}
+
+class FruitName2 implements Comparator<Fruit5> {
+	@Override
+	public int compare(Fruit5 a, Fruit5 b) {
+		return a.name.compareTo(a.name);
+	}
+}
+	class FruitPrice2 implements Comparator<Fruit5>{
+
+		@Override
+		public int compare(Fruit5 a, Fruit5 b) {
+			return a.price - b.price;
+		}
+	}
+
+		public class train_실습3_6_1객체배열탐색_Comparable {
 	public static void main(String[] args) {
 		Fruit5[] arr = {new Fruit5("사과", 200, "2023-5-8"), 
 				new Fruit5("감", 500, "2023-6-8"),
@@ -88,6 +118,10 @@ public class train_실습3_6_1객체배열탐색_Comparable {
 		System.out.println("\n익명클래스 객체로 정렬(가격)후 객체 배열: ");
 		Arrays.sort(arr, new Comparator<Fruit5>() {//여기서 comparator가 필요한 이유를 알아야 
 			//
+			@Override
+			public int compare(Fruit5 a, Fruit5 b) {
+				
+			return a.price - b.price;
 			}
 		});
 		System.out.println("\ncomparator 정렬(이름)후 객체 배열: ");
@@ -98,6 +132,7 @@ public class train_실습3_6_1객체배열탐색_Comparable {
 			}
 
 		};
+
 		Comparator<Fruit5> cc_price =
 
 		};
@@ -106,10 +141,12 @@ public class train_실습3_6_1객체배열탐색_Comparable {
 		/*
 		 * 교재 115 Arrays.binarySearch에 의한 검색
 		 */
-		int result3Index = Arrays.binarySearch(arr, newFruit5, cc_name);
-		System.out.println("\nArrays.binarySearch([수박,880,2023-5-18]) 조회결과::" + result3Index);
-		
-		result3Index = binarySearch(arr, newFruit5, cc_name);
+		int result3Index = Arrays.binarySearch(arr, newFruit5,
+				cc_name);System.out.println("\nArrays.binarySearch([수박,880,2023-5-18]) 조회결과::"+result3Index);
+
+		result3Index=
+
+		binarySearch(arr, newFruit5, cc_name);
 		System.out.println("\nbinarySearch([수박,880,2023-5-18]) 조회결과::" + result3Index);
 
 		sortData2(arr, cc_price);
@@ -123,7 +160,5 @@ public class train_실습3_6_1객체배열탐색_Comparable {
 		System.out.println("\nbinarySearch() 조회결과::" + result3Index);
 	
 	}
-	
-	
 
 }
