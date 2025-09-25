@@ -24,21 +24,25 @@ class IntStack4 {
 //--- 실행시 예외: 스택이 비어있음 ---//
 	public class EmptyIntStackException extends RuntimeException {
 //추가
-		public EmptyIntStackException(String string) {}
+		public EmptyIntStackException(String string) {
+			super(string);
+		}
 	}
 
+	public class RuntimeException extends Exception { // 생성자 중 하나: 메시지를 받는 생성자
+		public RuntimeException(String message) { // 부모 클래스인 Throwable 클래스의 생성자 호출
+			super(message);
+		}
+	}
 
-/*
- * public class RuntimeException extends Exception { // 생성자 중 하나: 메시지를 받는 생성자
- * public RuntimeException(String message) { // 부모 클래스인 Throwable 클래스의 생성자 호출
- * super(message); } }
- */
 //--- 실행시 예외: 스택이 가득 참 ---//
-public class OverflowIntStackException extends RuntimeException {
+	public class OverflowIntStackException extends RuntimeException {
 //추가
-	public OverflowIntStackException(String string) {
+		public OverflowIntStackException(String string) {
+			super(string);
+		}
 	}
-}
+
 //--- 생성자(constructor) ---//
 	public IntStack4(int maxlen) {
 //추가
@@ -46,7 +50,7 @@ public class OverflowIntStackException extends RuntimeException {
 		top = 0;
 		stk = new ArrayList<Integer>(maxlen);
 		try {
-		//추가
+			// 추가
 		} catch (OutOfMemoryError e) { // 생성할 수 없음
 			capacity = 0;
 		}
@@ -57,7 +61,7 @@ public class OverflowIntStackException extends RuntimeException {
 		if (isFull()) // 스택이 가득 참
 			throw new OverflowIntStackException("push: stack overflow");
 //추가
-		stk.add(null);
+		stk.add(x);
 		top++;
 	}
 
@@ -66,7 +70,7 @@ public class OverflowIntStackException extends RuntimeException {
 		if (isEmpty()) // 스택이 빔
 			throw new EmptyIntStackException("pop: stack empty");
 //추가
-		int result = stk.remove(top-1);
+		int result = stk.remove(top - 1);
 		top--;
 		return result;
 	}
@@ -76,7 +80,7 @@ public class OverflowIntStackException extends RuntimeException {
 		if (isEmpty()) // 스택이 빔
 			throw new EmptyIntStackException("peek: stack empty");
 //추가
-		return stk.get(top-1);
+		return stk.get(top - 1);
 	}
 
 //--- 스택을 비움 ---//
@@ -88,31 +92,43 @@ public class OverflowIntStackException extends RuntimeException {
 		if (isEmpty()) // 스택이 빔
 			throw new EmptyIntStackException("peek: stack empty");
 //추가
+		stk.removeAll(stk);
+		top = 0;
 	}
 
 //--- 스택에서 x를 찾아 인덱스(없으면 –1)를 반환 ---//
 	public int indexOf(int x) {
 //추가
+		if (stk.contains(x)) {
+			return stk.indexOf(x);
+		} else {
+			return -1;
+		}
+
 	}
 
 //--- 스택의 크기를 반환 ---//
 	public int getCapacity() {
 		// 추가
+		return capacity;
 	}
 
 //--- 스택에 쌓여있는 데이터 갯수를 반환 ---//
 	public int size() {
 		// 추가
+		return stk.size();
 	}
 
 //--- 스택이 비어있는가? ---//
 	public boolean isEmpty() {
 		// 추가
+		return stk.isEmpty();
 	}
 
 //--- 스택이 가득 찼는가? ---//
 	public boolean isFull() {
 		// 추가
+		return stk.size() >= capacity;
 	}
 
 //--- 스택 안의 모든 데이터를 바닥 → 정상 순서로 표시 ---//
@@ -122,6 +138,9 @@ public class OverflowIntStackException extends RuntimeException {
 			throw new EmptyIntStackException("peek: stack empty");
 		} else {
 			// 추가할 부분
+			for (int i = 0; i < stk.size(); i++) {
+				System.out.println(stk.get(i));
+			}
 		}
 	}
 }

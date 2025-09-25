@@ -26,13 +26,14 @@ class IntQueue3 {
 	private int front; // 맨 처음 요소 커서
 	private int rear; // 맨 끝 요소 커서
 	boolean isEmptyTag;
-	//private int num; // 현재 데이터 개수>> 삭제한 후에 queue가 full, empty를 구분하는 실습
+	private int num; // 현재 데이터 개수>> 삭제한 후에 queue가 full, empty를 구분하는 실습
 	//enque 하기전에 갯수를 세어 front==rear 조건을 체크한다
 	//deque도 마찬가지임 
 	
 //--- 실행시 예외: 큐가 비어있음 ---//
 	public class EmptyIntQueue3Exception extends RuntimeException {
-		public EmptyIntQueue3Exception() {
+		public EmptyIntQueue3Exception(String string) {
+			super(string);
 		}
 	}
 
@@ -45,7 +46,7 @@ class IntQueue3 {
 
 //--- 생성자(constructor) ---//
 	public IntQueue3(int maxlen) {
-		isEmptyTag = false;
+		isEmptyTag = true;
 		front = rear = 0;
 		capacity = maxlen;
 		que = new int[capacity];
@@ -54,26 +55,32 @@ class IntQueue3 {
 //--- 큐에 데이터를 인큐 ---//
 	public boolean enque(int x) throws OverflowIntQueue3Exception {
 
-		if(front == rear && isEmptyTag == true)
+		if(front == rear && isEmptyTag == false)
 			throw new OverflowIntQueue3Exception("큐 enque오버플로우");
 		que[rear] = x;
 		isEmptyTag = false;
+		rear = (rear + 1) % capacity;
 		return true;
 	}
 
 //--- 큐에서 데이터를 디큐 ---//
 	public int deque() throws EmptyIntQueue3Exception {
 
-		if(front == rear && isEmptyTag == false)
-			throw new UndeclaredThrowableException(null, "큐 enque언더플로우");
-		int result = que[front++];
+		if(front == rear && isEmptyTag == true)
+			throw new UndeclaredThrowableException(null, "큐 deque언더플로우");
+		int result = que[front];
+		front = (front + 1) % capacity;
 		if(front == rear)
-		isEmptyTag = false;
+		isEmptyTag = true;
+		
+		return result;
 	}
 
 //--- 큐에서 데이터를 피크(프런트 데이터를 들여다봄) ---//
 	public int peek() throws EmptyIntQueue3Exception {
-
+		if(front == rear && isEmptyTag == false)
+			throw new EmptyIntQueue3Exception("큐 피크언더플로우");
+		return que[front];
 	}
 
 //--- 큐를 비움 ---//
@@ -82,11 +89,20 @@ class IntQueue3 {
 		 * queue을 empty로 만들어야 한다.
 		 * queue이 empty일 때 clear()가 호출된 예외 발생해야 한다 
 		 */
+		front=rear=0;
+		isEmptyTag=true;
 	}
 
 //--- 큐에서 x를 검색하여 인덱스(찾지 못하면 –1)를 반환 ---//
 	public int indexOf(int x) {
-
+		
+		for (int i = 0; i < que.length; i++) {
+			int j = (i+front)%capacity;
+			if (que[j]==x) {
+				return j;
+			}
+		}
+		return -1;
 	}
 
 //--- 큐의 크기를 반환 ---//
@@ -96,22 +112,35 @@ class IntQueue3 {
 
 //--- 큐에 쌓여 있는 데이터 개수를 반환 ---//
 	public int size() {
-
+		 if (front == rear) {
+	            if (isEmptyTag) {
+					return 0;
+				}
+	            return capacity;
+	        } 
+		 else if(front < rear) {
+			 return rear - front;
+		 }
+		 else
+			 return capacity - front + rear;
+		
 	}
 
 //--- 큐가 비어있는가? ---//
 	public boolean isEmpty() {
-
+		return isEmptyTag && front==rear;
 	}
 
 //--- 큐가 가득 찼는가? ---//
 	public boolean isFull() {
-
+		return !isEmptyTag && front==rear;
 	}
 
 //--- 큐 안의 모든 데이터를 프런트 → 리어 순으로 출력 ---//
 	public void dump() {
-
+		for (int i = 0; i < size(); i++) {
+			System.out.println(que[(front + i) % capacity]);
+		}
 	}
 }
 public class train_실습4_3_2정수원형큐_배열 {

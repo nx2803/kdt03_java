@@ -6,6 +6,7 @@ package Chap2_기본자료구조;
  * 5번 실습 - 2장 실습 2-10를 수정하여 객체 배열의 정렬 구현
  */
 import java.util.Arrays;
+import java.util.Comparator;
 
 //5번 실습 - 2장 실습 2-14를 수정하여 객체 배열의 정렬 구현
 class PhyscData2 implements Comparable<PhyscData2> {
@@ -21,15 +22,12 @@ class PhyscData2 implements Comparable<PhyscData2> {
 		this.vision = d;
 
 	}
-
 	public String getName() {
 		return name;
 	}
-
 	public int getHeight() {
 		return height;
 	}
-
 	public double getVision() {
 		return vision;
 	}
@@ -50,8 +48,10 @@ public class train_실습2_14_1객체배열정렬 {
 		showData("정렬전", data);
 		sortData(data);
 		showData("정렬후", data);
-
-		Arrays.sort(data);// comparator가 필요하다
+		
+		
+		Comparator<PhyscData2> heightComparator = (a, b) -> Integer.compare(a.getHeight(), b.getHeight());
+		Arrays.sort(data, heightComparator);// comparator가 필요하다
 		showData("Arrays.sort() 실행후", data);
 
 		int resultIndex = binarySearch(data, "이길동");
@@ -61,6 +61,7 @@ public class train_실습2_14_1객체배열정렬 {
 
 			System.out.println("이길동이 존재하지 않는다");
 
+	
 		PhyscData2[] newData = insertObject(data, new PhyscData2("소주다", 179, 1.5));
 		// 배열의 사이즈를 1개 증가시킨후 insert되는 객체 보다 큰 값들은 우측으로 이동, 사이즈가 증가된 객체 배열을 리턴
 		System.out.println();
@@ -69,6 +70,7 @@ public class train_실습2_14_1객체배열정렬 {
 
 	private static PhyscData2[] insertObject(PhyscData2[] data, PhyscData2 physcData2) {
 		// TODO 자동 생성된 메소드 스텁
+		sortData(data);
 		PhyscData2 newData[] = new PhyscData2[data.length + 1];
 		int i = 0;
 		boolean m = false;
@@ -95,7 +97,7 @@ public class train_실습2_14_1객체배열정렬 {
 		int e = data.length - 1;
 		while (f <= e) {
 			int m = (f + e) / 2;
-			if (data[m].getName() == string) {
+			if (data[m].getName().equals(string)) {
 				return m;
 			} else if (data[m].getName().compareTo(string) < 0) {
 				f = m + 1;
@@ -113,7 +115,6 @@ public class train_실습2_14_1객체배열정렬 {
 			for (int j = i + 1; j < data.length; j++) {
 				if (data[i].getName().compareTo(data[j].getName()) > 0) {
 					swap(data, i, j);
-
 				}
 			}
 		}
@@ -125,7 +126,7 @@ public class train_실습2_14_1객체배열정렬 {
 		data[i] = data[j];
 		data[j] = a;
 	}
-
+  
 	private static void showData(String string, PhyscData2[] data) {
 		// TODO 자동 생성된 메소드 스텁
 		System.out.println(string);

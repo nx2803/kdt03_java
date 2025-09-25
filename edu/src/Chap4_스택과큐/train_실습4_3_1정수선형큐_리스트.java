@@ -6,6 +6,9 @@ package Chap4_스택과큐;
 
 import java.util.Scanner;
 
+import Chap4_스택과큐.IntStack4.OverflowIntStackException;
+import Chap4_스택과큐.objectStack.EmptyGenericStackException;
+
 /*
 * Queue of ArrayList
 */
@@ -49,27 +52,48 @@ try {
 
 //--- 큐에 데이터를 인큐 ---//
 	public int enque(int x) throws OverflowQueueException {
-		//que.add()
+		if (isFull()) {
+			throw new OverflowQueueException("enque: stack overflow");
+		}
+		que.add(x);
+		rear++;
+		return x;
 	}
 
 //--- 큐에서 데이터를 디큐 ---//
 	public int deque() throws EmptyQueueException {
-		//que.remove()
+		if (isEmpty()) {
+			throw new EmptyQueueException("deque: stack empty");
+		}
+		int dq = que.get(front);
+		que.remove(front);
+		front++;
+		return dq;
 	}
 
 //--- 큐에서 데이터를 피크(프런트 데이터를 들여다봄) ---//
 	public int peek() throws EmptyQueueException {
-		//que.get()
+		if (isEmpty()) {
+			throw new EmptyQueueException("peek: stack empty");
+		}
+		return que.get(rear-1);
+		
 	}
 
 //--- 큐를 비움 ---//
 	public void clear() {
+		que.clear();
 		front = rear = 0;
+		
 	}
 
 //--- 큐에서 x를 검색하여 인덱스(찾지 못하면 –1)를 반환 ---//
 	public int indexOf(int x) {
-
+		if (que.contains(x)) {
+			return que.indexOf(x);
+		}
+		else
+			return -1;
 	}
 
 //--- 큐의 크기를 반환 ---//
@@ -79,22 +103,25 @@ try {
 
 //--- 큐에 쌓여 있는 데이터 개수를 반환 ---//
 	public int size() {
-
+		return rear-front;
 	}
 
 //--- 큐가 비어있는가? ---//
 	public boolean isEmpty() {
-	
+		return rear == front;
 	}
 
 //--- 큐가 가득 찼는가? ---//
 	public boolean isFull() {
-
+		return (rear-front)>=capacity;
 	}
 
 //--- 큐 안의 모든 데이터를 프런트 → 리어 순으로 출력 ---//
 	public void dump() {
 		//que.get()
+		for (int i = front; i < rear; i++) {
+			System.out.println(que.get(i));
+		}
 	}
 }
 public class train_실습4_3_1정수선형큐_리스트 {
@@ -108,7 +135,10 @@ public class train_실습4_3_1정수선형큐_리스트 {
 			System.out.printf("현재 데이터 개수: %d / %d\n", oq.size(), oq.getCapacity());
 			System.out.print("(1)인큐　(2)디큐　(3)피크　(4)덤프　(0)종료: ");
 			int menu = stdIn.nextInt();
+			if (menu == 0)
+				break;
 			switch (menu) {
+			
 			case 1: // 인큐
 				rndx = random.nextInt(20);
 				System.out.print("입력데이터: (" + rndx +")");
