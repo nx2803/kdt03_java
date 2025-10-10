@@ -67,28 +67,41 @@ class Stack4 {
 
 	// --- 생성자(constructor) ---//
 	public Stack4(int capacity) {
-
+		this.capacity=capacity;
+		
 	}
 
 	// --- 스택에 x를 푸시 ---//
 	public boolean push(Point x) throws OverflowGenericStackException {
-
-
+		if (isFull()) {
+			throw new OverflowGenericStackException("꽉 참");
+		}
+		data.add(x);
+		top++;
 	}
 
 	// --- 스택에서 데이터를 팝(정상에 있는 데이터를 꺼냄) ---//
 	public Point pop() throws EmptyGenericStackException {
-
+		if (isEmpty()) {
+			throw new EmptyGenericStackException("빔");
+		}
+		Point res = data.remove(top-1);
+		top--;
+		return res;
 	}
 
 	// --- 스택에서 데이터를 피크(peek, 정상에 있는 데이터를 들여다봄) ---//
 	public Point peek() throws EmptyGenericStackException {
-
+		if (isEmpty()) {
+			throw new EmptyGenericStackException("빔");
+		}
+		return data.get(top - 1);
 	}
 
 	// --- 스택을 비움 ---//
 	public void clear() {
 		top = 0;
+		data.removeAll(data);
 	}
 
 	// --- 스택에서 x를 찾아 인덱스(없으면 –1)를 반환 ---//

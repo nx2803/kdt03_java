@@ -21,23 +21,23 @@ public class train_5_5_1마방진_실습 {
 		// 마방진 생성 알고리즘 (루벤스의 방법)
 		int row = 0, col = n / 2; // 시작 위치
 		for (int num = 1; num <= n * n; num++) {
-			
+			magicSquare[row][col] = num; // 현재 위치에 숫자 배치
 			// 구현
-			col++;
-			row--;
-			if (col >= n) {
-				col = 0;
+			int nc = col + 1;
+			int nr = row - 1;
+
+			if (nc >= n) {
+				nc = 0;
 			}
-			if (row < 0) {
-				row = n-1;
+			if (nr < 0) {
+				nr = n - 1;
 			}
-			if (magicSquare[row][col]!=0) {
-				row++;
+			if (magicSquare[nr][nc] != 0) {
+				row = row + 1;
+			} else {
+				col = nc;
+				row = nr;
 			}
-			else {
-				magicSquare[row][col] = num; // 현재 위치에 숫자 배치
-			}
-				
 		}
 
 		// 마방진 출력
@@ -52,10 +52,51 @@ public class train_5_5_1마방진_실습 {
 	// 마방진 출력 메서드
 	static void showSquare(int[][] magicSquare) {
 		// 구현
+
+		for (int i = 0; i < magicSquare.length; i++) {
+			for (int j = 0; j < magicSquare[0].length; j++) {
+				System.out.print(magicSquare[i][j] + "\t");
+			}
+			System.out.println();
+		}
 	}
 
 	// 마방진 유효성 검증 메서드
 	static boolean checkSquare(int[][] magicSquare, int magicSum) {
 		// 구현
+
+		for (int i = 0; i < magicSquare.length; i++) {
+			int res = 0;
+			for (int j = 0; j < magicSquare[0].length; j++) {
+				res = res + magicSquare[i][j];
+			}
+			if (res != magicSum) {
+				return false;
+			}
+		}
+		for (int i = 0; i < magicSquare[0].length; i++) {
+			int res = 0;
+			for (int j = 0; j < magicSquare.length; j++) {
+				res = res + magicSquare[j][i];
+			}
+			if (res != magicSum) {
+				return false;
+			}
+		}
+		int res = 0;
+		for (int i = 0; i < magicSquare.length; i++) {
+			res = res + magicSquare[i][i];
+		}
+		if (res != magicSum) {
+			return false;
+		}
+		res = 0;
+		for (int i = 0; i < magicSquare.length; i++) {
+			res = res + magicSquare[magicSquare.length - 1 - i][i];
+		}
+		if (res != magicSum) {
+			return false;
+		}
+		return true;
 	}
 }

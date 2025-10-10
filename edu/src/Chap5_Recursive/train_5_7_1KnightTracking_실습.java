@@ -28,7 +28,7 @@ class Offsets4 {
 }
 public class train_5_7_1KnightTracking_실습 {
 	static Offsets4[] moves = new Offsets4[8];//static을 선언하는 이유를 알아야 한다
-    static final int N = 8;
+    static final int N = 6;
 
 	
     // 체스판 배열
@@ -47,7 +47,11 @@ public class train_5_7_1KnightTracking_실습 {
 
     // 체스판을 초기화 (-1로 설정)
     private static void initializeBoard() {
- 
+    	for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board[0].length; j++) {
+				board[i][j]=-1;
+			}
+		}
     }
 
     // 체스판의 범위 내에서 유효한 움직임인지 확인
@@ -57,7 +61,7 @@ public class train_5_7_1KnightTracking_실습 {
 
     // 나이트 투어 알고리즘 (비재귀적으로 스택 사용)
     private static boolean solveKnightTracking(int startX, int startY) {
-    	for (int ia = 0; ia < N; ia++)
+    	for (int ia = 0; ia < 8; ia++)
     		moves[ia] = new Offsets4(0, 0);//배열에 Offsets4 객체를 치환해야 한다.
     	moves[0].a = -2;	moves[0].b = -1;//NW으로 이동
     	moves[1].a = -2;	moves[1].b = 1;//NE
@@ -76,17 +80,40 @@ public class train_5_7_1KnightTracking_실습 {
         board[startX][startY] = 0; // 시작 위치는 첫 번째 이동
 
         while (!stack.isEmpty()) {
+        	
+        	Point now = stack.peek();
+            if (board[now.x][now.y] == N*N-1) {
+				return true;
+			}
             
             // 8가지 방향으로 나이트 이동 시도
-        	int d=0;
+        	int d=now.moveToward;
+        	boolean move = false;
            while (d<8) {
-			x=startX+moves[d].a;
-			y=startY+moves[d].b; 
+			int nx=now.x+moves[d].a;
+			int ny=now.y+moves[d].b; 
+			if (isSafe(nx, ny)) {
+				now.moveToward = d+1;
+				
+				stack.push(new Point(nx, ny, 0));
+				board[nx][ny] = board[now.x][now.y]+1;
+				move = true;
+				for (int i = 0; i < board[nx][ny]-1; i++) {
+					System.out.print("*");
+				}
+				System.out.print(board[nx][ny]);
+				System.out.println();
+				break;
+			}
+			
 			d++;
 		}
 
             // 더 이상 이동할 곳이 없을 경우
-           
+           if (!move) {
+			board[now.x][now.y] = -1;
+			stack.pop();
+		}
         }
 
         return false; // 해결하지 못함
@@ -94,7 +121,12 @@ public class train_5_7_1KnightTracking_실습 {
 
     // 결과 출력
     private static void showTracking() {
-
+    	for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				System.out.print(board[i][j] +"\t");
+			}
+			System.out.println();
+		}
     }
 
     public static void main(String[] args) {
