@@ -1,9 +1,12 @@
 package Chap5_Recursive;
+
 //print로 변수 값 확인하는 디버깅 노동 피하자
 //이클립스 디버깅 실습 필요 : variables tab, Expressions tab 사용하기
 //92개 해 확인 필요
 import java.util.ArrayList;
 import java.util.List;
+
+import Chap5_Recursive.Stack4.EmptyGenericStackException;
 
 //https://www.geeksforgeeks.org/n-queen-problem-backtracking-3/?ref=lbp
 //N Queen problem / backtracking
@@ -37,9 +40,31 @@ class Point {
 	private int iy;
 
 	public Point(int x, int y) {
-		ix = x;
-		iy = y;
+		setIx(x);
+		setIy(y);
 	}
+
+	public int getIx() {
+		return ix;
+	}
+
+	public void setIx(int ix) {
+		this.ix = ix;
+	}
+
+	public int getIy() {
+		return iy;
+	}
+
+	public void setIy(int iy) {
+		this.iy = iy;
+	}
+
+	@Override
+	public String toString() {
+		return "(" + ix + ", " + iy + ")";
+	}
+
 }
 
 class Stack4 {
@@ -67,8 +92,8 @@ class Stack4 {
 
 	// --- 생성자(constructor) ---//
 	public Stack4(int capacity) {
-		this.capacity=capacity;
-		
+		this.capacity = capacity;
+		this.data = new ArrayList<Point>(capacity);
 	}
 
 	// --- 스택에 x를 푸시 ---//
@@ -78,6 +103,7 @@ class Stack4 {
 		}
 		data.add(x);
 		top++;
+		return true;
 	}
 
 	// --- 스택에서 데이터를 팝(정상에 있는 데이터를 꺼냄) ---//
@@ -85,7 +111,7 @@ class Stack4 {
 		if (isEmpty()) {
 			throw new EmptyGenericStackException("빔");
 		}
-		Point res = data.remove(top-1);
+		Point res = data.remove(top - 1);
 		top--;
 		return res;
 	}
@@ -133,7 +159,7 @@ class Stack4 {
 	}
 
 	// --- 스택 안의 모든 데이터를 바닥 → 꼭대기 순서로 출력 ---//
-	public void dump() throws EmptyGenericStackException{
+	public void dump() throws EmptyGenericStackException {
 		if (top <= 0)
 			throw new EmptyGenericStackException("stack:: dump - empty");
 		else {
@@ -147,72 +173,138 @@ class Stack4 {
 public class train_QueenEight_구현실습과제 {
 
 	int numberOfSolutions = 0;
-	int count = 0;//퀸 배치 갯수
-	int ix = 0, iy = 0;// 행 ix, 열 iy
-	Stack4 st = new Stack4(100); //100개를 저장할 수 있는 스택을 만들고
-	Point p = new Point(ix, iy);//현 위치를 객체로 만들고
-	d[ix][iy] = 1;//현 위치에 queen을 넣었다는 표시를 하고
-	count++;
-	st.push(p);// 스택에 현 위치 객체를 push
-	ix++;//ix는 행별로 퀸 배치되는 것을 말한다.
-	iy = 0;//다음 행으로 이동하면 열은 0부터 시작
-	while (true) {
-		if (st.isEmpty() && ix == 8) //ix가 8이면 8개 배치 완료, stack이 empty가 아니면 다른 해를 구한다 
-			break;
-		if ((iy = nextMove(d, ix, iy))== -1) {//다음 이동할 열을 iy로 주는데 -1이면 더이상 이동할 열이 없음을 나타냄
-				//pop()올리기
-		}
-			//push()
-		if (count == 8) { //8개를 모두 배치하면
+
+	public static void EightQueen(int[][] data) {
+
+		int count = 0;// 퀸 배치 갯수
+		int ix = 0, iy = 0;// 행 ix, 열 iy
+		Stack4 st = new Stack4(100); // 100개를 저장할 수 있는 스택을 만들고
+		Point p = new Point(ix, iy);// 현 위치를 객체로 만들고
+		data[ix][iy] = 1;// 현 위치에 queen을 넣었다는 표시를 하고
+		count++;
+		st.push(p);// 스택에 현 위치 객체를 push
+
+//	ix++;//ix는 행별로 퀸 배치되는 것을 말한다.
+//	iy = 0;//다음 행으로 이동하면 열은 0부터 시작
+		while (true) {
+
+			while (iy < data.length) {
+				if (checkMove(data, ix, iy)) {
+					// 안전한 위치를 찾으면
+					data[ix][iy] = 1; // 퀸 배치
+					// 새로운 Point 객체를 만들어 스택에 push
+					try {
+						st.push(new Point(ix, iy));
+					} catch (Stack4.OverflowGenericStackException e) {
+						e.printStackTrace();
+					}
+					ix++; // 다음 행으로 이동
+					iy = 0; // 다음 행의 첫 열부터 시작
+					
+					break;
+				}
+				iy++; // 다음 열 탐색
+			}
+
+			if (st.isEmpty() && ix == 8) // ix가 8이면 8개 배치 완료, stack이 empty가 아니면 다른 해를 구한다
+				break;
+
+			if ((iy = nextMove(data, ix, iy)) == -1) {// 다음 이동할 열을 iy로 주는데 -1이면 더이상 이동할 열이 없음을 나타냄
+				// pop()올리기
+				try {
+					Point lastQueen = st.pop();
+					ix = lastQueen.getIx();
+					iy = lastQueen.getIy();
+					data[ix][iy] = 0; // 퀸 제거
+					iy++; // 다음 열부터 재탐색
+				} catch (Stack4.EmptyGenericStackException e) {
+					e.printStackTrace();
+					break;
+				}
+			}
+
+//		if (checkMove(data, ix, iy))
+//			//push()
+			if (count == 8) { // 8개를 모두 배치하면
+				showQueens(data);
+				break;
+			}
 
 		}
 
 	}
 
-}
+	public static boolean checkRow(int[][] d, int crow) { // 배열 d에서 행 crow에 퀸을 배치할 수 있는지 조사
+//		for (int i = 0; i < d.length; i++) {
+//			if (d[crow][i] == 1) {
+//				return false;
+//			}
+//		}
+		return true;
+	}
 
+	public static boolean checkCol(int[][] d, int ccol) {// 배열 d에서 열 ccol에 퀸을 배치할 수 있는지 조사
+		for (int i = 0; i < d.length; i++) {
+			if (d[i][ccol] == 1) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-public static boolean checkRow(int[][] d, int crow) { //배열 d에서 행 crow에 퀸을 배치할 수 있는지 조사
-
-}
-
-public static boolean checkCol(int[][] d, int ccol) {//배열 d에서 열 ccol에 퀸을 배치할 수 있는지 조사
-
-}
 //배열 d에서 행 cx, 열 cy에 퀸을 남서, 북동 대각선으로 배치할 수 있는지 조사
-public static boolean checkDiagSW(int[][] d, int cx, int cy) { // x++, y-- or x--, y++ where 0<= x,y <= 7
-
-}
+	public static boolean checkDiagSW(int[][] d, int cx, int cy) { // x++, y-- or x--, y++ where 0<= x,y <= 7
+		for (int i = cx, j = cy; i >= 0 && j < d.length; i--, j++) {
+			if (d[i][j] == 1) {
+				return false;
+			}
+		}
+		return true;
+	}
 
 //배열 d에서 행 cx, 열 cy에 퀸을 남동, 북서 대각선으로 배치할 수 있는지 조사
-public static boolean checkDiagSE(int[][] d, int cx, int cy) {// x++, y++ or x--, y--
-
-}
-//배열 d에서 (x,y)에 퀸을 배치할 수 있는지  조사
-public static boolean checkMove(int[][] d, int x, int y) {// (x,y)로 이동 가능한지를 check
-	if (checkDiagSE(d, x, y)==true || checkDiagSW(d, x, y)==true||checkRow(d, y)==true) {
-		return false;
-	}
-	else
+	public static boolean checkDiagSE(int[][] d, int cx, int cy) {// x++, y++ or x--, y--
+		for (int i = cx, j = cy; i >= 0 && j >= 0; i--, j--) {
+			if (d[i][j] == 1) {
+				return false;
+			}
+		}
 		return true;
-}
+	}
+
+//배열 d에서 (x,y)에 퀸을 배치할 수 있는지  조사
+	public static boolean checkMove(int[][] d, int x, int y) {// (x,y)로 이동 가능한지를 check
+		if (checkDiagSE(d, x, y) == false || checkDiagSW(d, x, y) == false || checkRow(d, y) == false) {
+			return false;
+		} else
+			return true;
+	}
+
 //배열 d에서 현재 위치(row,col)에 대하여 다음에 이동할 위치 nextCol을 반환, 이동이 가능하지 않으면 -1를 리턴
-public static int nextMove(int[][] d, int row, int col) {// 현재 row, col에 대하여 이동할 col을 return
-	
-}
+	public static int nextMove(int[][] d, int row, int col) {// 현재 row, col에 대하여 이동할 col을 return
+		if (!checkMove(d, row, col)) {
+			return -1;
+		} else {
+			return col;
+		}
+	}
 
-static void showQueens(int[][] data) {// 배열 출력
+	static void showQueens(int[][] data) {// 배열 출력
+		for (int i = 0; i < data.length; i++) {
+			for (int j = 0; j < data[0].length; j++) {
+				System.out.print(data[i][j] + '\t');
+			}
+		}
+	}
 
-}
+	public static void main(String[] args) {
+		int row = 8, col = 8;
+		int[][] data = new int[8][8];
+		for (int i = 0; i < data.length; i++)
+			for (int j = 0; j < data[0].length; j++)
+				data[i][j] = 0;
 
-public static void main(String[] args) {
-	int row = 8, col = 8;
-	int[][] data = new int[8][8];
-	for (int i = 0; i < data.length; i++)
-		for (int j = 0; j < data[0].length; j++)
-			data[i][j] = 0;
+		EightQueen(data);
 
-	EightQueen(data);
-
-}
+	}
 }
