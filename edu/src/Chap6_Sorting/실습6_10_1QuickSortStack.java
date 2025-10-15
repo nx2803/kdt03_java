@@ -15,11 +15,12 @@ public class 실습6_10_1QuickSortStack {
 
  //--- 퀵 정렬(비재귀 버전)---//
  static void quickSort(int[] a, int left, int right) {
-//     IntStack lstack = new IntStack(right - left + 1);
-//     IntStack rstack = new IntStack(right - left + 1);
-//
-//     lstack.push(left);
-//     rstack.push(right);
+	 int mid = right - left + 1;
+     Stack lstack = new Stack();
+     Stack rstack = new Stack();
+
+     lstack.push(left);
+     rstack.push(right);
 	 Stack<Point> st = new Stack<>();
 	 Point p = new Point(left,right);
 	 st.push(p);
@@ -66,8 +67,8 @@ public class 실습6_10_1QuickSortStack {
      for (int i = 0; i < nx; i++) {
 		double d = Math.random();
 		x[i] = (int) (d * 20);
-         //System.out.print("x[" + i + "]: ");
-         //x[i] = stdIn.nextInt();
+         System.out.print("x[" + i + "]: ");
+         x[i] = stdIn.nextInt();
      }
      showData(x);
 

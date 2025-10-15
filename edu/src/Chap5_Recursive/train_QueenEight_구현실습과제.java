@@ -1,7 +1,5 @@
 package Chap5_Recursive;
 
-//print로 변수 값 확인하는 디버깅 노동 피하자
-//이클립스 디버깅 실습 필요 : variables tab, Expressions tab 사용하기
 //92개 해 확인 필요
 import java.util.ArrayList;
 import java.util.List;
@@ -11,13 +9,6 @@ import Chap5_Recursive.Stack4.EmptyGenericStackException;
 //https://www.geeksforgeeks.org/n-queen-problem-backtracking-3/?ref=lbp
 //N Queen problem / backtracking
 //모든 해가 나오는 버젼 만들기 
-/*
- * 체스판은 8 x 8 체스의 기물: king/가로세로대각선 1칸만 이동, queen/가로세로 대각선/같은 편의 기물을 넘을 수 없다,
- * Rook/가로,세로 이동/다른 기물을 넘을 수없다, bishop/대각선, knight/1-2칸 이동/다른 기물을 넘을 수 있다,
- * pawn/처음 이동은 2칸까지 가능, 그 후 한칸만 가능, 잡을 때는 대각선 가능 체스판 최대 배치 문제 : king/16,
- * Queen/8, rook/8, bishop/?, knight/? rook 2개/a, h, knight 2개/b, g, bishop
- * 2개/c, f, queen 1개/black queen은 black 칸에, 폰 8개
- */
 /*
  * 8-Queen 문제는 체스판 위에 8개의 퀸을 배치하되, 서로 공격할 수 없도록 배치하는 문제입니다. 
  * 이 문제를 해결하기 위한 비재귀적(스택 기반) 알고리즘을 구현하려면, 다음과 같은 방법을 사용할 수 있습니다.
@@ -172,44 +163,58 @@ class Stack4 {
 
 public class train_QueenEight_구현실습과제 {
 
-	int numberOfSolutions = 0;
+	static int numberOfSolutions = 0;
+	static final int n = 8;
 
 	public static void EightQueen(int[][] data) {
 
-		int count = 0;// 퀸 배치 갯수
+		//int count = 0;// 퀸 배치 갯수
 		int ix = 0, iy = 0;// 행 ix, 열 iy
 		Stack4 st = new Stack4(100); // 100개를 저장할 수 있는 스택을 만들고
-		Point p = new Point(ix, iy);// 현 위치를 객체로 만들고
-		data[ix][iy] = 1;// 현 위치에 queen을 넣었다는 표시를 하고
-		count++;
-		st.push(p);// 스택에 현 위치 객체를 push
+		// Point p = new Point(ix, iy);// 현 위치를 객체로 만들고
+		// data[ix][iy] = 1;// 현 위치에 queen을 넣었다는 표시를 하고
+//		count++;
+//		st.push(p);// 스택에 현 위치 객체를 push
 
 //	ix++;//ix는 행별로 퀸 배치되는 것을 말한다.
 //	iy = 0;//다음 행으로 이동하면 열은 0부터 시작
 		while (true) {
 
-			while (iy < data.length) {
-				if (checkMove(data, ix, iy)) {
+			while (iy < n) {
+
+				if (ix < n && checkMove(data, ix, iy)) {
 					// 안전한 위치를 찾으면
 					data[ix][iy] = 1; // 퀸 배치
-					// 새로운 Point 객체를 만들어 스택에 push
+					// 새로운 Point 객\체를 만들어 스택에 push
 					try {
 						st.push(new Point(ix, iy));
 					} catch (Stack4.OverflowGenericStackException e) {
 						e.printStackTrace();
+						return;
 					}
 					ix++; // 다음 행으로 이동
 					iy = 0; // 다음 행의 첫 열부터 시작
-					
+
 					break;
 				}
 				iy++; // 다음 열 탐색
 			}
 
-			if (st.isEmpty() && ix == 8) // ix가 8이면 8개 배치 완료, stack이 empty가 아니면 다른 해를 구한다
-				break;
+			if (iy == n) {
+				
+				if (ix == n) {
+					numberOfSolutions++;
+					System.out.println("solution : "+numberOfSolutions);
+					showQueens(data);
+				}
 
-			if ((iy = nextMove(data, ix, iy)) == -1) {// 다음 이동할 열을 iy로 주는데 -1이면 더이상 이동할 열이 없음을 나타냄
+				if (st.isEmpty()) { // ix가 8이면 8개 배치 완료, stack이 empty가 아니면 다른 해를 구한다
+					System.out.println("총 "+numberOfSolutions+"개의 답");
+					
+					break;
+				}
+
+//				if ((iy = nextMove(data, ix, iy)) == -1) {// 다음 이동할 열을 iy로 주는데 -1이면 더이상 이동할 열이 없음을 나타냄
 				// pop()올리기
 				try {
 					Point lastQueen = st.pop();
@@ -222,28 +227,21 @@ public class train_QueenEight_구현실습과제 {
 					break;
 				}
 			}
-
-//		if (checkMove(data, ix, iy))
-//			//push()
-			if (count == 8) { // 8개를 모두 배치하면
-				showQueens(data);
-				break;
-			}
-
 		}
-
 	}
 
 	public static boolean checkRow(int[][] d, int crow) { // 배열 d에서 행 crow에 퀸을 배치할 수 있는지 조사
-//		for (int i = 0; i < d.length; i++) {
-//			if (d[crow][i] == 1) {
-//				return false;
-//			}
-//		}
+		for (int i = 0; i < d.length; i++) {
+			if (d[crow][i] == 1) {
+				return false;
+			}
+		}
 		return true;
 	}
 
 	public static boolean checkCol(int[][] d, int ccol) {// 배열 d에서 열 ccol에 퀸을 배치할 수 있는지 조사
+		if (ccol >= n)
+			return false;
 		for (int i = 0; i < d.length; i++) {
 			if (d[i][ccol] == 1) {
 				return false;
@@ -254,7 +252,14 @@ public class train_QueenEight_구현실습과제 {
 
 //배열 d에서 행 cx, 열 cy에 퀸을 남서, 북동 대각선으로 배치할 수 있는지 조사
 	public static boolean checkDiagSW(int[][] d, int cx, int cy) { // x++, y-- or x--, y++ where 0<= x,y <= 7
-		for (int i = cx, j = cy; i >= 0 && j < d.length; i--, j++) {
+		if (cx >= n || cy >= n || cx < 0 || cy < 0)
+			return true;
+		for (int i = cx - 1, j = cy + 1; i >= 0 && j < d.length; i--, j++) {
+			if (d[i][j] == 1) {
+				return false;
+			}
+		}
+		for (int i = cx + 1, j = cy - 1; i < d.length && j >= 0; i++, j--) {
 			if (d[i][j] == 1) {
 				return false;
 			}
@@ -264,7 +269,14 @@ public class train_QueenEight_구현실습과제 {
 
 //배열 d에서 행 cx, 열 cy에 퀸을 남동, 북서 대각선으로 배치할 수 있는지 조사
 	public static boolean checkDiagSE(int[][] d, int cx, int cy) {// x++, y++ or x--, y--
-		for (int i = cx, j = cy; i >= 0 && j >= 0; i--, j--) {
+		if (cx >= n || cy >= n || cx < 0 || cy < 0)
+			return true;
+		for (int i = cx - 1, j = cy - 1; i >= 0 && j >= 0; i--, j--) {
+			if (d[i][j] == 1) {
+				return false;
+			}
+		}
+		for (int i = cx + 1, j = cy + 1; i < d.length && j < d.length; i++, j++) {
 			if (d[i][j] == 1) {
 				return false;
 			}
@@ -274,7 +286,9 @@ public class train_QueenEight_구현실습과제 {
 
 //배열 d에서 (x,y)에 퀸을 배치할 수 있는지  조사
 	public static boolean checkMove(int[][] d, int x, int y) {// (x,y)로 이동 가능한지를 check
-		if (checkDiagSE(d, x, y) == false || checkDiagSW(d, x, y) == false || checkRow(d, y) == false) {
+		if (x >= n || y >= n)
+			return false;
+		if (checkDiagSE(d, x, y) == false || checkDiagSW(d, x, y) == false || checkCol(d, y) == false) {
 			return false;
 		} else
 			return true;
@@ -282,6 +296,8 @@ public class train_QueenEight_구현실습과제 {
 
 //배열 d에서 현재 위치(row,col)에 대하여 다음에 이동할 위치 nextCol을 반환, 이동이 가능하지 않으면 -1를 리턴
 	public static int nextMove(int[][] d, int row, int col) {// 현재 row, col에 대하여 이동할 col을 return
+		if (row >= n || col >= n)
+			return -1;
 		if (!checkMove(d, row, col)) {
 			return -1;
 		} else {
@@ -290,15 +306,36 @@ public class train_QueenEight_구현실습과제 {
 	}
 
 	static void showQueens(int[][] data) {// 배열 출력
-		for (int i = 0; i < data.length; i++) {
-			for (int j = 0; j < data[0].length; j++) {
-				System.out.print(data[i][j] + '\t');
-			}
-		}
+//		for (int i = 0; i < data.length; i++) {
+//			for (int j = 0; j < data[0].length; j++) {
+//				System.out.print(data[i][j] == 1 ? "♕\t" : "□\t");
+//			}
+//			System.out.println();
+//			
+//		}
+//		System.out.println();
+//		
+		System.out.println("  ---------------------------------");
+        for (int i = 0; i < data.length; i++) {
+            System.out.print(i+1 + " |"); 
+            for (int j = 0; j < data[0].length; j++) {
+                System.out.print(data[i][j] == 1 ? " ♕ " : "   ");
+                System.out.print("|"); 
+            }
+            System.out.println();
+            System.out.println("  ---------------------------------"); 
+        }
+        // 열 번호 추가
+        System.out.print("   ");
+        for (int j = 0; j < data[0].length; j++) {
+            System.out.print(" " + (j+1) + "  ");
+        }
+        System.out.println(); 
 	}
 
 	public static void main(String[] args) {
 		int row = 8, col = 8;
+		System.out.println("row");
 		int[][] data = new int[8][8];
 		for (int i = 0; i < data.length; i++)
 			for (int j = 0; j < data[0].length; j++)
