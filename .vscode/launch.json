@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "train_실습과제6_3_Merge정렬다항식연결ver",
+            "request": "launch",
+            "mainClass": "Chap6_Sorting.train_실습과제6_3_Merge정렬다항식연결ver",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
             "name": "LinkedListMergeSort",
             "request": "launch",
             "mainClass": "Chap6_Sorting.LinkedListMergeSort",

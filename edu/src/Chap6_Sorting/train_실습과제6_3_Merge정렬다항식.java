@@ -7,100 +7,70 @@ package Chap6_Sorting;
  /*
  * 6장 구현과제 - 다항식 add, multiply
  */
-// class Term implements Comparable<Term>{
-// 	double coef;           // 계수
-// 	int    exp;            // 지수
-// 	Term(){}
-// 	//--- 생성자(constructor) ---//
-// 	Term(double coef, int exp) {
-// 		this.coef = coef;  this.exp = exp; 
-// 	}
-// 	//--- 신체검사 데이터를 문자열로 반환 --//
-// 	@Override
-// 	public String toString() {
-// 		return coef + "x**" + exp + " ";
-// 	}
-// @Override
-// public int compareTo(Term d2) { //지수가 같으면 계수로 비교
-// 	return d2.exp - exp;
-// }
-// }
-class Node {
+class Term implements Comparable<Term> {
 
     double coef;           // 계수
     int exp;            // 지수
-    Node next;
 
-    public Node(double coef, int exp) {
+    Term() {
+    }
+    //--- 생성자(constructor) ---//
+
+    Term(double coef, int exp) {
         this.coef = coef;
         this.exp = exp;
-        this.next = next;
     }
 
+    @Override
+    public String toString() {
+        return coef + "x^" + exp + " ";
+    }
+
+    @Override
+    public int compareTo(Term d2) { //지수가 같으면 계수로 비교
+        if (this.exp != d2.exp) {
+            return d2.exp - this.exp;
+        }
+        return Double.compare(d2.coef, coef);
+    }
 }
 
 public class train_실습과제6_3_Merge정렬다항식 {
     // --- 배열 요소 p[idx1]와 p[idx2]의 값을 교환 ---//
-    // static void merge(Term[] p, int lefta, int righta, int leftb, int rightb ) {
-    // 	//body를 지우고 작성 훈련 연습이 도움이 된다 
-    // 	Term temp[] = new Term[30];
-    // 	//구현코드
-    // 	int i = lefta,j = leftb,k=0;
 
-    // }
-    static Node merge(Node left, Node right) {
-        Node fh = new Node(0.0, 0);
-        Node now = fh;
+    static void merge(Term[] p, int lefta, int righta, int leftb, int rightb) {
+        //body를 지우고 작성 훈련 연습이 도움이 된다 
+        Term temp[] = new Term[30];
+        //구현코드
+        int i = lefta, j = leftb, k = 0;
 
-        while (left != null && right != null) {
-            if (left.exp > right.exp) {
-                now.next = left;
-                left = left.next;
-            } else if (left.exp < right.exp) {
-                now.next = right;
-                right = right.next;
-            } else {
-                if (left.coef > right.coef) {
-                    now.next = left;
-                    left = left.next;
-                } else {
-                    now.next = right;
-                    right = right.next;
-                }
-            }
-			now = now.next;
-        }
-		if(left != null){
-			now.next=left;
-		}
-		else{
-			now.next=right;
-		}
-		return fh.next;
     }
 
     // --- 퀵 정렬(비재귀 버전)---//
-    // static void MergeSort(Term[] p, int left, int right) {
-    //     if (left == right) {
-    //         return;
-    //     }
-    //     int mid = (left + right) / 2;
-    //     MergeSort(p, left, right);
-    //     MergeSort(p, mid + 1, right);
-    //     merge(p, left, right, left, right);
+    static void MergeSort(Term[] p, int left, int right) {
+        int mid = (left + right) / 2;
+        if (left == right) {
+            return;
+        }
 
-    // }
-	static Node MergeSort(Node head){
-		
-	}
+    }
 
     static void ShowPolynomial(String msg, Term[] x, int count) {
         //str 변수는 다항식 이름으로 스트링이다
         //count가 -1이면 다항식 x의 length로 계산하고 -1이면 count가 다항식 항의 숫자이다 
         //정렬후 다항식 x = 2.5x**7  + 3.8x**5  + 3.1x**4  + 1.5x**3  + 3.3x**2  + 4.0x**1  + 2.2x**0 
-        System.out.println("\n" + msg + " : ");
-
         //구현코드
+        System.out.print(msg);
+        int length = (count == -1) ? x.length : count;
+        for (int i = 0; i < length; i++) {
+            if (i > 0 && x[i].coef > 0) {
+                System.out.print(" + ");
+            } else if (x[i].coef < 0) {
+                System.out.print(" ");
+            }
+            System.out.print(x[i].toString());
+        }
+		System.out.println();
     }
 
     static int AddPolynomial(Term[] p1, Term[] p2, Term[] result) {
