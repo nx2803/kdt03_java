@@ -6,6 +6,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "train_실습과제8_6객체이중리스트",
+            "request": "launch",
+            "mainClass": "Chap8_List.train_실습과제8_6객체이중리스트",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
+            "name": "train_실습과제6_4_heap_정렬",
+            "request": "launch",
+            "mainClass": "Chap6_Sorting.train_실습과제6_4_heap_정렬",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
+            "name": "Josephus",
+            "request": "launch",
+            "mainClass": "Chap8_List.Josephus",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
             "name": "train_실습과제6_3_Merge정렬다항식연결ver",
             "request": "launch",
             "mainClass": "Chap6_Sorting.train_실습과제6_3_Merge정렬다항식연결ver",

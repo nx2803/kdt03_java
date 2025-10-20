@@ -102,8 +102,8 @@ class Stack4 {
 		if (isEmpty()) {
 			throw new EmptyGenericStackException("빔");
 		}
-		Point res = data.remove(top - 1);
-		top--;
+		--top;
+		Point res = data.remove(top);
 		return res;
 	}
 
