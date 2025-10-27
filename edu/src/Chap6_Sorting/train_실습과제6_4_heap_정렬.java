@@ -4,8 +4,8 @@ import java.util.Random;
 import java.util.Scanner;
 
 interface MaxHeap {
-	public void Insert(int x);
-	public int DeleteMax();
+	public void insert(int x);
+	public int deleteMax();
 }
 
 class Heap implements MaxHeap {
@@ -33,7 +33,7 @@ class Heap implements MaxHeap {
 			heap[j] = imsi;
 	}
 	@Override
-	public void Insert(int x) {//max heap이 되도록 insert한다. 삽입후 complete binary tree가 유지되어야 한다.
+	public void insert(int x) {//max heap이 되도록 insert한다. 삽입후 complete binary tree가 유지되어야 한다.
 		int i;
 		if (n == MaxSize) {
 			HeapFull();
@@ -49,7 +49,7 @@ class Heap implements MaxHeap {
 		}
 	}
 	@Override
-	public int DeleteMax() {//heap에서 가장 큰 값을 삭제하여 리턴한다. 
+	public int deleteMax() {//heap에서 가장 큰 값을 삭제하여 리턴한다. 
 		int x= heap[1];
 		int i = 1;
 		int j;
@@ -64,7 +64,7 @@ class Heap implements MaxHeap {
 		n--;
 		while (i * 2 <= n) { 
 			j = i * 2;
-			if (j + 1 <= n && heap[j] < heap[j+1]) {
+			if (j < n && heap[j] < heap[j+1]) {
 				j++;
 			}
 			if (heap[i] >= heap[j]) {
@@ -112,7 +112,7 @@ public class train_실습과제6_4_heap_정렬 {
 			case 1://난수를 생성하여 배열 x에 넣는다 > heap에 insert한다.
 				for (int i = 1; i < count+1; i++) {
 					x[i] = rnd.nextInt(99)+1;
-					heap.Insert(x[i]);
+					heap.insert(x[i]);
 				}
 			     showData(x);
 				break;
@@ -124,7 +124,7 @@ public class train_실습과제6_4_heap_정렬 {
 			int s = heap.getN();
 			int []sorted = new int[s];
 				for (int i = 0; i < s; i++) {
-					sorted[i] = heap.DeleteMax();
+					sorted[i] = heap.deleteMax();
 				}
 
 				for (int i = sorted.length-1; i >= 0; i--) {

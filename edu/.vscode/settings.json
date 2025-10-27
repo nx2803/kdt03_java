@@ -1,3 +1,4 @@
 {
-    "workbench.colorTheme": "Gabriel (Dark)"
+    "workbench.colorTheme": "Gabriel (Dark)",
+    "java.debug.settings.onBuildFailureProceed": true
 }
