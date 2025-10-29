@@ -43,6 +43,15 @@ class SimpleObject4 {
             name = sc.next();
         }
     }
+    public static final Comparator<SimpleObject4> NO_ORDER = new NoOrderComparator();
+
+    private static class NoOrderComparator implements Comparator<SimpleObject4> {
+
+        @Override
+        public int compare(SimpleObject4 d1, SimpleObject4 d2) {
+            return d1.no.compareTo(d2.no);
+        }
+    }
 
 }
 
@@ -324,12 +333,31 @@ class Tree4 {
 
     TreeNode4 findParent(TreeNode4 current, Comparator<? super SimpleObject4> c) {
         //주어진 노드의 parent node를 찾는 알고리즘
-		
+        if (root == null || current == root) {
+            return null;
+        }
+        TreeNode4 p = root;
+        TreeNode4 parent = null;
+        while (parent != null) {
+            int comp = c.compare(current.data, p.data);
+
+            if (comp == 0) {
+                return parent;
+            } else if (comp < 0) {
+                p = parent;
+                parent = parent.LeftChild;
+            } else {
+                p = parent;
+                parent = parent.RightChild;
+            }
+
+        }
+        return null;
     }
 
     boolean isLeafNode(TreeNode4 current) {
         //주어진 노드가 leaf node인지 검사
-
+        return current != null && current.LeftChild == null && current.RightChild == null;
     }
 
     void inorder() {
@@ -373,26 +401,138 @@ class Tree4 {
         // left subtree < x < right subtree
         TreeNode4 p = root;
         TreeNode4 q = null;
+        TreeNode4 n = new TreeNode4(obj);
+        if (root == null) {
+            root = n;
+            return true;
+        }
 
+        while (p != null) {
+            q = p;
+            int comp = c.compare(obj, p.data);
+            if (comp == 0) {
+
+                return false;
+            } else if (comp < 0) {
+                p = p.LeftChild;
+            } else {
+                p = p.RightChild;
+            }
+        }
+
+        int comp = c.compare(obj, q.data);
+        if (comp < 0) {
+            q.LeftChild = n;
+        } else {
+            q.RightChild = n;
+        }
+        return true;
     }
 
     public boolean delete(SimpleObject4 obj, Comparator<? super SimpleObject4> c) {
         //주어진 객체 obj를 포함한 노드를 찾아 삭제하는 알고리즘
         //난이도: 최상급 중에서 최상급
+        if (root == null) {
+            return false;
+        }
+
         TreeNode4 p = root, q = null;
+        while (p != null) {
+            int comp = c.compare(obj, p.data);
+            if (comp == 0) {
+                break;
+            } else if (comp < 0) {
+                q = p;
+                p = p.LeftChild;
+            } else {
+                q = p;
+                p = p.RightChild;
+            }
+            if (p == null) {
+                return false;
+            }
+        }
+
+        if (p.LeftChild != null && p.RightChild != null) {
+            TreeNode4 t = p.RightChild;
+            TreeNode4 tp = p;
+            while (t.LeftChild != null) {
+                tp = t;
+                t = t.LeftChild;
+            }
+            p.data = t.data;
+
+            p = t;
+            q = tp;
+        } else {
+            TreeNode4 t = (p.LeftChild == null) ? p.LeftChild : p.RightChild;
+            if (p == root) {
+                root = t;
+            } else if (q.LeftChild == p) {
+                q.LeftChild = t;
+            } else {
+                q.RightChild = t;
+            }
+        }
+        return true;
 
     }
 
     boolean search(SimpleObject4 obj, Comparator<? super SimpleObject4> c) {
         //주어진 객체 obj를 갖는 노드를 찾는 문제
         TreeNode4 p = root;
+        while (p != null) {
+            int comp = c.compare(obj, p.data);
+
+            if (comp == 0) {
+                System.out.println("찾았어요");
+                return true;
+            } else if (comp < 0) {
+                p = p.LeftChild;
+            } else {
+                p = p.RightChild;
+            }
+
+        }
+        System.out.println("없어요");
+        return false;
 
     }
 
     void levelOrder() //root 부터 level별로 출력 : root는 level 1, level 2는 다음줄에 => 같은 level이면 같은 줄에 출력하게 한다 
     {
+        if (root == null) {
+            System.out.println("트리가 없어요");
+            return;
+        }
         ObjectQueue4 q = new ObjectQueue4(20);
         TreeNode4 CurrentNode = root;
+
+        q.enque(CurrentNode);
+        int count = 1;
+        int nlevcount = 0;
+
+        while (!q.isEmpty()) {
+            CurrentNode = q.deque();
+            count--;
+            System.out.print(CurrentNode.data + "\t");
+
+            if (CurrentNode.LeftChild != null) {
+                q.enque(CurrentNode.LeftChild);
+                nlevcount++;
+            }
+            if (CurrentNode.RightChild != null) {
+                q.enque(CurrentNode.RightChild);
+                nlevcount++;
+            }
+
+            if (count == 0) {
+                System.out.println();
+                count = nlevcount;
+                nlevcount = 0;
+            }
+        }
+        System.out.println();
 
     }
 

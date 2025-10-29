@@ -226,7 +226,8 @@ class DoubledLinkedList {
         if (b.isEmpty()) {
             return;
         }
-        Node4 p = first.rlink, q = b.first.rlink;
+        Node4 p = first.rlink;
+        Node4 q = b.first.rlink;
         Node4 p_prev = first;
 
         while (q != b.first) {
