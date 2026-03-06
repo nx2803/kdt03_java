@@ -1,0 +1,347 @@
+package Chap5_Recursive;
+
+//92개 해 확인 필요
+import java.util.ArrayList;
+import java.util.List;
+
+import Chap5_Recursive.Stack4.EmptyGenericStackException;
+
+//https://www.geeksforgeeks.org/n-queen-problem-backtracking-3/?ref=lbp
+//N Queen problem / backtracking
+//모든 해가 나오는 버젼 만들기 
+/*
+ * 8-Queen 문제는 체스판 위에 8개의 퀸을 배치하되, 서로 공격할 수 없도록 배치하는 문제입니다. 
+ * 이 문제를 해결하기 위한 비재귀적(스택 기반) 알고리즘을 구현하려면, 다음과 같은 방법을 사용할 수 있습니다.
+
+개요
+1. 스택을 사용하여 백트래킹을 구현합니다. 각 스택의 요소는 체스판의 각 열에 대한 퀸의 배치 상태를 나타냅니다.
+2. 퀸을 한 줄씩 배치한 후, 유효한지 확인하고, 다음 줄로 이동합니다.
+3. 유효하지 않으면 스택을 이용해 이전 상태로 돌아가서 다른 경로를 시도합니다.
+
+알고리즘
+1. 스택을 이용하여 백트래킹을 구현하기 때문에, 현재 상태를 스택에 저장합니다. 
+   스택의 각 원소는 퀸의 배치를 나타냅니다.
+2. 체스판의 각 열에 대해 가능한 위치를 하나씩 확인하면서 퀸을 배치하고, 
+   충돌이 발생하지 않는다면 다음 열로 넘어갑니다.
+3. 더 이상 유효한 위치가 없으면, 스택에서 이전 상태로 되돌아가서 새로운 경로를 탐색합니다.
+4. 퀸을 8개 다 배치하면, 해를 찾은 것이므로 스택을 이용해 해결책을 저장합니다.
+ */
+class Point {
+	private int ix;
+	private int iy;
+
+	public Point(int x, int y) {
+		setIx(x);
+		setIy(y);
+	}
+
+	public int getIx() {
+		return ix;
+	}
+
+	public void setIx(int ix) {
+		this.ix = ix;
+	}
+
+	public int getIy() {
+		return iy;
+	}
+
+	public void setIy(int iy) {
+		this.iy = iy;
+	}
+
+	@Override
+	public String toString() {
+		return "(" + ix + ", " + iy + ")";
+	}
+
+}
+
+class Stack4 {
+	// --- 실행시 예외: 스택이 비어있음 ---//
+	// generic class는 Throwable을 상속받을 수 없다 - 지원하지 않는다
+	public class EmptyGenericStackException extends Exception {
+		private static final long serialVersionUID = 1L;
+
+		public EmptyGenericStackException(String message) {
+			super(message);
+		}
+	}
+
+	// --- 실행시 예외: 스택이 가득 참 ---//
+	public class OverflowGenericStackException extends RuntimeException {
+		public OverflowGenericStackException(String message) {
+			super(message);
+		}
+	}
+
+	private List<Point> data; // 스택용 배열
+	// private List<T> data;
+	private int capacity; // 스택의 크기
+	private int top; // 스택 포인터
+
+	// --- 생성자(constructor) ---//
+	public Stack4(int capacity) {
+		this.capacity = capacity;
+		this.data = new ArrayList<Point>(capacity);
+	}
+
+	// --- 스택에 x를 푸시 ---//
+	public boolean push(Point x) throws OverflowGenericStackException {
+		if (isFull()) {
+			throw new OverflowGenericStackException("꽉 참");
+		}
+		data.add(x);
+		top++;
+		return true;
+	}
+
+	// --- 스택에서 데이터를 팝(정상에 있는 데이터를 꺼냄) ---//
+	public Point pop() throws EmptyGenericStackException {
+		if (isEmpty()) {
+			throw new EmptyGenericStackException("빔");
+		}
+		--top;
+		Point res = data.remove(top);
+		return res;
+	}
+
+	// --- 스택에서 데이터를 피크(peek, 정상에 있는 데이터를 들여다봄) ---//
+	public Point peek() throws EmptyGenericStackException {
+		if (isEmpty()) {
+			throw new EmptyGenericStackException("빔");
+		}
+		return data.get(top - 1);
+	}
+
+	// --- 스택을 비움 ---//
+	public void clear() {
+		top = 0;
+		data.removeAll(data);
+	}
+
+	// --- 스택에서 x를 찾아 인덱스(없으면 –1)를 반환 ---//
+	public int indexOf(Point x) {
+		for (int i = top - 1; i >= 0; i--) // 꼭대기 쪽부터 선형 검색
+			if (data.get(i).equals(x))
+				return i; // 검색 성공
+		return -1; // 검색 실패
+	}
+
+	// --- 스택의 크기를 반환 ---//
+	public int getCapacity() {
+		return capacity;
+	}
+
+	// --- 스택에 쌓여있는 데이터 갯수를 반환 ---//
+	public int size() {
+		return top;
+	}
+
+	// --- 스택이 비어있는가? ---//
+	public boolean isEmpty() {
+		return top <= 0;
+	}
+
+	// --- 스택이 가득 찼는가? ---//
+	public boolean isFull() {
+		return top >= capacity;
+	}
+
+	// --- 스택 안의 모든 데이터를 바닥 → 꼭대기 순서로 출력 ---//
+	public void dump() throws EmptyGenericStackException {
+		if (top <= 0)
+			throw new EmptyGenericStackException("stack:: dump - empty");
+		else {
+			for (int i = 0; i < top; i++)
+				System.out.print(data.get(i) + " ");
+			System.out.println();
+		}
+	}
+}
+
+public class train_QueenEight_구현실습과제 {
+
+	static int numberOfSolutions = 0;
+	static final int n = 8;
+
+	public static void EightQueen(int[][] data) {
+
+		//int count = 0;// 퀸 배치 갯수
+		int ix = 0, iy = 0;// 행 ix, 열 iy
+		Stack4 st = new Stack4(100); // 100개를 저장할 수 있는 스택을 만들고
+		// Point p = new Point(ix, iy);// 현 위치를 객체로 만들고
+		// data[ix][iy] = 1;// 현 위치에 queen을 넣었다는 표시를 하고
+//		count++;
+//		st.push(p);// 스택에 현 위치 객체를 push
+
+//	ix++;//ix는 행별로 퀸 배치되는 것을 말한다.
+//	iy = 0;//다음 행으로 이동하면 열은 0부터 시작
+		while (true) {
+
+			while (iy < n) {
+
+				if (ix < n && checkMove(data, ix, iy)) {
+					// 안전한 위치를 찾으면
+					data[ix][iy] = 1; // 퀸 배치
+					// 새로운 Point 객\체를 만들어 스택에 push
+					try {
+						st.push(new Point(ix, iy));
+					} catch (Stack4.OverflowGenericStackException e) {
+						e.printStackTrace();
+						return;
+					}
+					ix++; // 다음 행으로 이동
+					iy = 0; // 다음 행의 첫 열부터 시작
+
+					break;
+				}
+				iy++; // 다음 열 탐색
+			}
+
+			if (iy == n) {
+				
+				if (ix == n) {
+					numberOfSolutions++;
+					System.out.println("solution : "+numberOfSolutions);
+					showQueens(data);
+				}
+
+				if (st.isEmpty()) { // ix가 8이면 8개 배치 완료, stack이 empty가 아니면 다른 해를 구한다
+					System.out.println("총 "+numberOfSolutions+"개의 답");
+					
+					break;
+				}
+
+//				if ((iy = nextMove(data, ix, iy)) == -1) {// 다음 이동할 열을 iy로 주는데 -1이면 더이상 이동할 열이 없음을 나타냄
+				// pop()올리기
+				try {
+					Point lastQueen = st.pop();
+					ix = lastQueen.getIx();
+					iy = lastQueen.getIy();
+					data[ix][iy] = 0; // 퀸 제거
+					iy++; // 다음 열부터 재탐색
+				} catch (Stack4.EmptyGenericStackException e) {
+					e.printStackTrace();
+					break;
+				}
+			}
+		}
+	}
+
+	public static boolean checkRow(int[][] d, int crow) { // 배열 d에서 행 crow에 퀸을 배치할 수 있는지 조사
+		for (int i = 0; i < d.length; i++) {
+			if (d[crow][i] == 1) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public static boolean checkCol(int[][] d, int ccol) {// 배열 d에서 열 ccol에 퀸을 배치할 수 있는지 조사
+		if (ccol >= n)
+			return false;
+		for (int i = 0; i < d.length; i++) {
+			if (d[i][ccol] == 1) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+//배열 d에서 행 cx, 열 cy에 퀸을 남서, 북동 대각선으로 배치할 수 있는지 조사
+	public static boolean checkDiagSW(int[][] d, int cx, int cy) { // x++, y-- or x--, y++ where 0<= x,y <= 7
+		if (cx >= n || cy >= n || cx < 0 || cy < 0)
+			return true;
+		for (int i = cx - 1, j = cy + 1; i >= 0 && j < d.length; i--, j++) {
+			if (d[i][j] == 1) {
+				return false;
+			}
+		}
+		for (int i = cx + 1, j = cy - 1; i < d.length && j >= 0; i++, j--) {
+			if (d[i][j] == 1) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+//배열 d에서 행 cx, 열 cy에 퀸을 남동, 북서 대각선으로 배치할 수 있는지 조사
+	public static boolean checkDiagSE(int[][] d, int cx, int cy) {// x++, y++ or x--, y--
+		if (cx >= n || cy >= n || cx < 0 || cy < 0)
+			return true;
+		for (int i = cx - 1, j = cy - 1; i >= 0 && j >= 0; i--, j--) {
+			if (d[i][j] == 1) {
+				return false;
+			}
+		}
+		for (int i = cx + 1, j = cy + 1; i < d.length && j < d.length; i++, j++) {
+			if (d[i][j] == 1) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+//배열 d에서 (x,y)에 퀸을 배치할 수 있는지  조사
+	public static boolean checkMove(int[][] d, int x, int y) {// (x,y)로 이동 가능한지를 check
+		if (x >= n || y >= n)
+			return false;
+		if (checkDiagSE(d, x, y) == false || checkDiagSW(d, x, y) == false || checkCol(d, y) == false) {
+			return false;
+		} else
+			return true;
+	}
+
+//배열 d에서 현재 위치(row,col)에 대하여 다음에 이동할 위치 nextCol을 반환, 이동이 가능하지 않으면 -1를 리턴
+	public static int nextMove(int[][] d, int row, int col) {// 현재 row, col에 대하여 이동할 col을 return
+		if (row >= n || col >= n)
+			return -1;
+		if (!checkMove(d, row, col)) {
+			return -1;
+		} else {
+			return col;
+		}
+	}
+
+	static void showQueens(int[][] data) {// 배열 출력
+//		for (int i = 0; i < data.length; i++) {
+//			for (int j = 0; j < data[0].length; j++) {
+//				System.out.print(data[i][j] == 1 ? "♕\t" : "□\t");
+//			}
+//			System.out.println();
+//			
+//		}
+//		System.out.println();
+//		
+		System.out.println("  ---------------------------------");
+        for (int i = 0; i < data.length; i++) {
+            System.out.print(i+1 + " |"); 
+            for (int j = 0; j < data[0].length; j++) {
+                System.out.print(data[i][j] == 1 ? " ♕ " : "   ");
+                System.out.print("|"); 
+            }
+            System.out.println();
+            System.out.println("  ---------------------------------"); 
+        }
+        // 열 번호 추가
+        System.out.print("   ");
+        for (int j = 0; j < data[0].length; j++) {
+            System.out.print(" " + (j+1) + "  ");
+        }
+        System.out.println(); 
+	}
+
+	public static void main(String[] args) {
+		int row = 8, col = 8;
+		System.out.println("row");
+		int[][] data = new int[8][8];
+		for (int i = 0; i < data.length; i++)
+			for (int j = 0; j < data[0].length; j++)
+				data[i][j] = 0;
+
+		EightQueen(data);
+
+	}
+}

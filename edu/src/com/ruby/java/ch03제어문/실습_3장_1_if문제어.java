@@ -7,7 +7,9 @@ public class 실습_3장_1_if문제어 {
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("if 문 실습: ");
 		System.out.print("택배 무게를 입력하세요: ");
+		int fare = 0;
 		int weight = scanner.nextInt();
+<<<<<<< HEAD
 		if (weight<1000) {
 			System.out.println("택배 요금은 3000원입니다");
 		}
@@ -23,12 +25,22 @@ public class 실습_3장_1_if문제어 {
 			System.out.println("택배 요금은 12000원입니다");
 
 		}
+=======
+		if (weight < 1000) {
+			fare = 3000;
+		} else if (weight <= 5000) {
+			fare = 5000;
+		} else if (weight <= 10000) {
+			fare = 10000;
+		} else if (weight > 10000) {
+			fare = 12000;
+		}
+		System.out.println("택배 요금은 " + fare + "원입니다");
+		scanner.close();
+>>>>>>> 34fd97afb8a0c7b6f06e410039271a8ede0a938d
 		/*
-		 * 무게에 따라 택배 요금 계산하여 출력한다
-		 * 1000 이하 3000
-		 * 1000 < w <= 5000 5000
-		 * 5000 < w <= 10000 8000
-		 * 10000 < w  12000
+		 * 무게에 따라 택배 요금 계산하여 출력한다 1000 이하 3000 1000 < w <= 5000 5000 5000 < w <= 10000
+		 * 8000 10000 < w 12000
 		 * 
 		 * 출력: 택배 요금은 0000원입니다
 		 */

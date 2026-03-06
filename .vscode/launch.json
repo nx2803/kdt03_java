@@ -1,0 +1,55 @@
+{
+    // IntelliSense를 사용하여 가능한 특성에 대해 알아보세요.
+    // 기존 특성에 대한 설명을 보려면 가리킵니다.
+    // 자세한 내용을 보려면 https://go.microsoft.com/fwlink/?linkid=830387을(를) 방문하세요.
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "train_실습과제8_6객체이중리스트",
+            "request": "launch",
+            "mainClass": "Chap8_List.train_실습과제8_6객체이중리스트",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
+            "name": "train_실습과제6_4_heap_정렬",
+            "request": "launch",
+            "mainClass": "Chap6_Sorting.train_실습과제6_4_heap_정렬",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
+            "name": "Josephus",
+            "request": "launch",
+            "mainClass": "Chap8_List.Josephus",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
+            "name": "train_실습과제6_3_Merge정렬다항식연결ver",
+            "request": "launch",
+            "mainClass": "Chap6_Sorting.train_실습과제6_3_Merge정렬다항식연결ver",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
+            "name": "LinkedListMergeSort",
+            "request": "launch",
+            "mainClass": "Chap6_Sorting.LinkedListMergeSort",
+            "projectName": "src"
+        },
+        {
+            "type": "java",
+            "name": "train_QueenEight_구현실습과제",
+            "request": "launch",
+            "mainClass": "Chap5_Recursive.train_QueenEight_구현실습과제",
+            "projectName": "src"
+        },
+        {
+            "type": "jdk",
+            "request": "launch",
+            "name": "Launch Java App"
+        }
+    ]
+}

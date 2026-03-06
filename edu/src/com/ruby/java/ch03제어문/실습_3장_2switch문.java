@@ -1,4 +1,7 @@
 package com.ruby.java.ch03제어문;
+
+import java.util.Scanner;
+
 /*
  * switch - case 문 실습
  * 음료 자판기 프로그램
@@ -26,5 +29,32 @@ package com.ruby.java.ch03제어문;
  *     
  */
 public class 실습_3장_2switch문 {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.print("숫자를 고르십시오: ");
+		int choice = sc.nextInt(); //화면에서 숫자 입력
+//		int price;
+		switch (choice) {
+		case 1: {
+			System.out.println("1. 커피 - 2000원"); break;
+		}
+		case 2: {
+			System.out.println("2. 맥주 - 2400원"); break;
+		}
+		case 3: {
+			System.out.println("3. 콜라 - 1500원"); break;
+		}
+		case 4: {
+			System.out.println("4. 주스 - 1200원"); break;
+		}
+		default: {
+			System.out.println("1~4"); 
+		}
+		/*
+		 * default: throw new IllegalArgumentException("Unexpected value: " + choice);
+		 */
+		sc.close();
+		}
+	}
 
 }

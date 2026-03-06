@@ -7,5 +7,12 @@ package com.ruby.java.ch03제어문;
  * 
  */
 public class 실습_3장_10_구구단_테이블 {
-
+public static void main(String[] args) {
+	for (int i = 1; i < 10; i++) {
+		for (int b = 1; b < 10; b++) {
+			System.out.print(i+"*"+b+"="+i*b+" ");
+		}
+		System.out.println();
+	}
+}
 }
