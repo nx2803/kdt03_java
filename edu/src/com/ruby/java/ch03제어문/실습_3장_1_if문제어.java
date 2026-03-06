@@ -5,10 +5,24 @@ import java.util.Scanner;
 public class 실습_3장_1_if문제어 {
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
-
+		System.out.println("if 문 실습: ");
 		System.out.print("택배 무게를 입력하세요: ");
 		int weight = scanner.nextInt();
+		if (weight<1000) {
+			System.out.println("택배 요금은 3000원입니다");
+		}
+		else if (weight<=5000) {
+			System.out.println("택배 요금은 5000원입니다");
 
+		}
+		else if (weight<=10000) {
+			System.out.println("택배 요금은 10000원입니다");
+
+		}
+		else if (weight>10000) {
+			System.out.println("택배 요금은 12000원입니다");
+
+		}
 		/*
 		 * 무게에 따라 택배 요금 계산하여 출력한다
 		 * 1000 이하 3000
@@ -18,6 +32,7 @@ public class 실습_3장_1_if문제어 {
 		 * 
 		 * 출력: 택배 요금은 0000원입니다
 		 */
+		
 
 		scanner.close();
 	}
