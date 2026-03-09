@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Josephus",
+            "request": "launch",
+            "mainClass": "Chap8_List.Josephus",
+            "projectName": "kdt03_java_df9b9cfb"
+        },
+        {
+            "type": "java",
             "name": "train_실습과제8_6객체이중리스트",
             "request": "launch",
             "mainClass": "Chap8_List.train_실습과제8_6객체이중리스트",

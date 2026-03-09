@@ -41,7 +41,7 @@ public class Josephus {
         Node n = s.next;
         Node c = s;
         int count = 0;
-        while (count < mn) {
+        while (count < mn) {''
             int id = rd.nextInt(50) + 1;
             if (!set.contains(id)) {
                 set.add(id);
